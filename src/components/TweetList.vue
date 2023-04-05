@@ -5,7 +5,7 @@
         <div class="tweet" v-for="tweet in allTweets" :key="tweet.id">
             <p class="tweet_titulo">{{ tweet.nombre }}</p>
             <p class="tweet_text">{{ tweet.tweet }}</p>
-            <span>{{ formtDate(tweet.fechaCreacion) }}</span>
+            <span>{{ formatDate(tweet.fechaCreacion) }}</span>
             <p><i class="fa-solid fa-circle-xmark" @click="eliminarTweet(tweet.id)"></i></p>
         </div>
     </div>
@@ -16,19 +16,21 @@
 // import "moment/locale/es"
 import { useTweetStore } from '../stores/tweet';
 import { storeToRefs } from 'pinia';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import dayjs from 'dayjs'
 import { es } from "dayjs/locale/es";
-import relativeTime from 'dayjs/plugin/relativeTime';
+import { computed } from 'vue';
 
 const storeTweet = useTweetStore()
 
 const { allTweets } = storeToRefs(storeTweet);
 
-dayjs.extend(relativeTime);
 
 
-const formtDate = () => {
-    return dayjs().locale("es").fromNow();
+
+const formatDate = (fecha) => {
+    dayjs.extend(relativeTime);
+    return dayjs(fecha).locale('es').fromNow();
 }
 
 const eliminarTweet = (id) => {
